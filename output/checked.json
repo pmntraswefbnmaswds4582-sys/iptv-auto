@@ -1,0 +1,2521 @@
+{
+  "generated_at": 1786890695,
+  "source": "https://iptv-org.github.io/iptv/index.m3u",
+  "input_channel_count": 22,
+  "available_source_count": 19,
+  "true_4k_source_count": 0,
+  "best_channel_count": 22,
+  "check_rounds": 3,
+  "channels": [
+    {
+      "name": "CCTV-1 (1080p)",
+      "tvg_id": "CCTV1.cn@HD",
+      "channel_id": "CCTV1.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/TpA3cUl.png",
+      "group": "General",
+      "category": "央视",
+      "url": "http://69.30.245.50/live/cctv1.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.073,
+        "total_bytes": 123,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.087,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.066,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.065,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "http://69.30.245.50/live/cctv1.m3u8: Invalid data found when processing input"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-1 (720p)",
+      "tvg_id": "CCTV1.cn@SD",
+      "channel_id": "CCTV1.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/TpA3cUl.png",
+      "group": "General",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv1hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 630,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.131,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-2 (720p)",
+      "tvg_id": "CCTV2.cn@SD",
+      "channel_id": "CCTV2.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/ILamhwU.png",
+      "group": "Business",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv2hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.133,
+        "total_bytes": 630,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.133,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.132,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.135,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-3 (720p)",
+      "tvg_id": "CCTV3.cn@SD",
+      "channel_id": "CCTV3.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/iFlkIuw.png",
+      "group": "Entertainment",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv3hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.128,
+        "total_bytes": 618,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 206,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 206,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 206,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-4K (1080p)",
+      "tvg_id": "CCTV4K.cn@HD",
+      "channel_id": "CCTV4K.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/fxusYlX.png",
+      "group": "General",
+      "category": "央视4K",
+      "url": "http://198.204.240.250:82/live/cctv4k.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.128,
+        "total_bytes": 282,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 94,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 94,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.127,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 94,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "http://198.204.240.250:82/live/cctv4k.m3u8: Invalid data found when processing input"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-5+",
+      "tvg_id": "CCTV5Plus.cn@SD",
+      "channel_id": "CCTV5Plus.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/OK8mdJV.png",
+      "group": "Sports",
+      "category": "央视",
+      "url": "https://myip.pdtvhd.com/Sports/streams/CCTV5pul.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.801,
+        "total_bytes": 1638,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.813,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 546,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.844,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 546,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.745,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 546,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-6 (1080p)",
+      "tvg_id": "CCTV6.cn@HD",
+      "channel_id": "CCTV6.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/rFiaef7.png",
+      "group": "Movies",
+      "category": "央视",
+      "url": "http://69.30.245.50/live/cctv6.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 600,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 200,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 200,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 200,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-6 [Geo-blocked]",
+      "tvg_id": "CCTV6.cn@SD",
+      "channel_id": "CCTV6.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/rFiaef7.png",
+      "group": "Movies",
+      "category": "央视",
+      "url": "https://live.eac-news.com/CCTV/streams/cctv6.m3u8",
+      "available": false,
+      "stability": {
+        "success_count": 0,
+        "total_rounds": 3,
+        "success_rate": 0.0,
+        "average_response_time": 2.484,
+        "total_bytes": 0,
+        "score": 12.0,
+        "rounds": [
+          {
+            "success": false,
+            "status": null,
+            "response_time": 6.6,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "HTTPError: HTTP Error 404: Not Found"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 0.57,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "HTTPError: HTTP Error 404: Not Found"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 0.281,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "HTTPError: HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "basic check failed"
+      },
+      "final_score": 0
+    },
+    {
+      "name": "CCTV-7 (720p)",
+      "tvg_id": "CCTV7.cn@SD",
+      "channel_id": "CCTV7.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/CKcPMQC.png",
+      "group": "Education",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv7hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.466,
+        "total_bytes": 594,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 1.14,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 174,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-8 (720p)",
+      "tvg_id": "CCTV8.cn@SD",
+      "channel_id": "CCTV8.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/GyHaZ8X.png",
+      "group": "Culture",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv8hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 630,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.131,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-9 (576i)",
+      "tvg_id": "CCTV9.cn@SD",
+      "channel_id": "CCTV9.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/3tivvMm.png",
+      "group": "Documentary",
+      "category": "央视",
+      "url": "https://xykt-fix.github.io/Y77.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.038,
+        "total_bytes": 4986,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.092,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 1662,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.01,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 1662,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.012,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 1662,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "ffprobe timeout"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-10 (720p)",
+      "tvg_id": "CCTV10.cn@SD",
+      "channel_id": "CCTV10.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/sSSO7UD.png",
+      "group": "Education",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv10hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.13,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-11 (720p)",
+      "tvg_id": "CCTV11.cn@SD",
+      "channel_id": "CCTV11.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/CjOWx7L.png",
+      "group": "Music",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv11hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.13,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.133,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-12 (720p)",
+      "tvg_id": "CCTV12.cn@SD",
+      "channel_id": "CCTV12.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/3yTuiOM.png",
+      "group": "Lifestyle",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv12hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-13 (1080p)",
+      "tvg_id": "CCTV13.cn@HD",
+      "channel_id": "CCTV13.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/6MTar6J.png",
+      "group": "News",
+      "category": "央视",
+      "url": "http://go.bkpcp.top/mg/cctv13",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 1.558,
+        "total_bytes": 414,
+        "score": 96.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 2.303,
+            "content_type": "text/html",
+            "bytes_read": 138,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 1.579,
+            "content_type": "text/html",
+            "bytes_read": 138,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.792,
+            "content_type": "text/html",
+            "bytes_read": 138,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-13 (720p)",
+      "tvg_id": "CCTV13.cn@SD",
+      "channel_id": "CCTV13.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/6MTar6J.png",
+      "group": "News",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv13hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.131,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.127,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-14 (1080p)",
+      "tvg_id": "CCTV14.cn@HD",
+      "channel_id": "CCTV14.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/c5SXW7i.png",
+      "group": "Kids",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv14hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.128,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-15 (1080p)",
+      "tvg_id": "CCTV15.cn@SD",
+      "channel_id": "CCTV15.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/CCV0eRG.png",
+      "group": "Music",
+      "category": "央视",
+      "url": "https://xykt-fix.github.io/play/a02e/index.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.015,
+        "total_bytes": 7545,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.022,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 2515,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.012,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 2515,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.012,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 2515,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1920,
+        "height": 1080,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-16 (1080p)",
+      "tvg_id": "CCTV16.cn@HD",
+      "channel_id": "CCTV16.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/ZzV6JQp.png",
+      "group": "Sports",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv16hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.065,
+        "total_bytes": 123,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.065,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.066,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.065,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "http://74.91.26.218:82/live/cctv16hd.m3u8: Invalid data found when processing input"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-17 (1080p)",
+      "tvg_id": "CCTV17.cn@HD",
+      "channel_id": "CCTV17.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/jSQURxS.png",
+      "group": "Education;Outdoor",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv17hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 603,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 201,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 201,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 201,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1920,
+        "height": 1080,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "凤凰中文 (720p)",
+      "tvg_id": "PhoenixChineseChannel.hk@SD",
+      "channel_id": "PhoenixChineseChannel.hk",
+      "feed": "SD",
+      "logo": "https://raw.githubusercontent.com/wanglindl/TVlogo/main/img/Phoenix1.png",
+      "group": "General",
+      "category": "凤凰卫视",
+      "url": "http://223.110.245.139/ott.js.chinamobile.com/PLTV/3/224/3221226922/index.m3u8",
+      "available": false,
+      "stability": {
+        "success_count": 0,
+        "total_rounds": 3,
+        "success_rate": 0.0,
+        "average_response_time": 15.015,
+        "total_bytes": 0,
+        "score": 2.0,
+        "rounds": [
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.016,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.015,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.015,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "basic check failed"
+      },
+      "final_score": 0
+    },
+    {
+      "name": "凤凰资讯 (720p)",
+      "tvg_id": "PhoenixInfoNewsChannel.hk@SD",
+      "channel_id": "PhoenixInfoNewsChannel.hk",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/mt4h3VO.png",
+      "group": "News",
+      "category": "凤凰卫视",
+      "url": "http://223.110.245.167/ott.js.chinamobile.com/PLTV/3/224/3221226923/index.m3u8",
+      "available": false,
+      "stability": {
+        "success_count": 0,
+        "total_rounds": 3,
+        "success_rate": 0.0,
+        "average_response_time": 15.011,
+        "total_bytes": 0,
+        "score": 2.0,
+        "rounds": [
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.006,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.011,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.015,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "basic check failed"
+      },
+      "final_score": 0
+    }
+  ],
+  "best_channels": [
+    {
+      "name": "凤凰中文 (720p)",
+      "tvg_id": "PhoenixChineseChannel.hk@SD",
+      "channel_id": "PhoenixChineseChannel.hk",
+      "feed": "SD",
+      "logo": "https://raw.githubusercontent.com/wanglindl/TVlogo/main/img/Phoenix1.png",
+      "group": "General",
+      "category": "凤凰卫视",
+      "url": "http://223.110.245.139/ott.js.chinamobile.com/PLTV/3/224/3221226922/index.m3u8",
+      "available": false,
+      "stability": {
+        "success_count": 0,
+        "total_rounds": 3,
+        "success_rate": 0.0,
+        "average_response_time": 15.015,
+        "total_bytes": 0,
+        "score": 2.0,
+        "rounds": [
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.016,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.015,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.015,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "basic check failed"
+      },
+      "final_score": 0
+    },
+    {
+      "name": "凤凰资讯 (720p)",
+      "tvg_id": "PhoenixInfoNewsChannel.hk@SD",
+      "channel_id": "PhoenixInfoNewsChannel.hk",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/mt4h3VO.png",
+      "group": "News",
+      "category": "凤凰卫视",
+      "url": "http://223.110.245.167/ott.js.chinamobile.com/PLTV/3/224/3221226923/index.m3u8",
+      "available": false,
+      "stability": {
+        "success_count": 0,
+        "total_rounds": 3,
+        "success_rate": 0.0,
+        "average_response_time": 15.011,
+        "total_bytes": 0,
+        "score": 2.0,
+        "rounds": [
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.006,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.011,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 15.015,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "URLError: <urlopen error timed out>"
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "basic check failed"
+      },
+      "final_score": 0
+    },
+    {
+      "name": "CCTV-1 (1080p)",
+      "tvg_id": "CCTV1.cn@HD",
+      "channel_id": "CCTV1.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/TpA3cUl.png",
+      "group": "General",
+      "category": "央视",
+      "url": "http://69.30.245.50/live/cctv1.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.073,
+        "total_bytes": 123,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.087,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.066,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.065,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "http://69.30.245.50/live/cctv1.m3u8: Invalid data found when processing input"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-1 (720p)",
+      "tvg_id": "CCTV1.cn@SD",
+      "channel_id": "CCTV1.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/TpA3cUl.png",
+      "group": "General",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv1hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 630,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.131,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-10 (720p)",
+      "tvg_id": "CCTV10.cn@SD",
+      "channel_id": "CCTV10.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/sSSO7UD.png",
+      "group": "Education",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv10hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.13,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-11 (720p)",
+      "tvg_id": "CCTV11.cn@SD",
+      "channel_id": "CCTV11.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/CjOWx7L.png",
+      "group": "Music",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv11hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.13,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.133,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-12 (720p)",
+      "tvg_id": "CCTV12.cn@SD",
+      "channel_id": "CCTV12.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/3yTuiOM.png",
+      "group": "Lifestyle",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv12hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-13 (1080p)",
+      "tvg_id": "CCTV13.cn@HD",
+      "channel_id": "CCTV13.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/6MTar6J.png",
+      "group": "News",
+      "category": "央视",
+      "url": "http://go.bkpcp.top/mg/cctv13",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 1.558,
+        "total_bytes": 414,
+        "score": 96.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 2.303,
+            "content_type": "text/html",
+            "bytes_read": 138,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 1.579,
+            "content_type": "text/html",
+            "bytes_read": 138,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.792,
+            "content_type": "text/html",
+            "bytes_read": 138,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-13 (720p)",
+      "tvg_id": "CCTV13.cn@SD",
+      "channel_id": "CCTV13.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/6MTar6J.png",
+      "group": "News",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv13hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.131,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.127,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-14 (1080p)",
+      "tvg_id": "CCTV14.cn@HD",
+      "channel_id": "CCTV14.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/c5SXW7i.png",
+      "group": "Kids",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv14hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.128,
+        "total_bytes": 639,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 213,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-15 (1080p)",
+      "tvg_id": "CCTV15.cn@SD",
+      "channel_id": "CCTV15.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/CCV0eRG.png",
+      "group": "Music",
+      "category": "央视",
+      "url": "https://xykt-fix.github.io/play/a02e/index.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.015,
+        "total_bytes": 7545,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.022,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 2515,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.012,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 2515,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.012,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 2515,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1920,
+        "height": 1080,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-16 (1080p)",
+      "tvg_id": "CCTV16.cn@HD",
+      "channel_id": "CCTV16.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/ZzV6JQp.png",
+      "group": "Sports",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv16hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.065,
+        "total_bytes": 123,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.065,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.066,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.065,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 41,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "http://74.91.26.218:82/live/cctv16hd.m3u8: Invalid data found when processing input"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-17 (1080p)",
+      "tvg_id": "CCTV17.cn@HD",
+      "channel_id": "CCTV17.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/jSQURxS.png",
+      "group": "Education;Outdoor",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv17hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 603,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 201,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 201,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 201,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1920,
+        "height": 1080,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-2 (720p)",
+      "tvg_id": "CCTV2.cn@SD",
+      "channel_id": "CCTV2.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/ILamhwU.png",
+      "group": "Business",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv2hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.133,
+        "total_bytes": 630,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.133,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.132,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.135,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-3 (720p)",
+      "tvg_id": "CCTV3.cn@SD",
+      "channel_id": "CCTV3.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/iFlkIuw.png",
+      "group": "Entertainment",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv3hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.128,
+        "total_bytes": 618,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 206,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 206,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 206,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-5+",
+      "tvg_id": "CCTV5Plus.cn@SD",
+      "channel_id": "CCTV5Plus.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/OK8mdJV.png",
+      "group": "Sports",
+      "category": "央视",
+      "url": "https://myip.pdtvhd.com/Sports/streams/CCTV5pul.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.801,
+        "total_bytes": 1638,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.813,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 546,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.844,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 546,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.745,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 546,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-6 (1080p)",
+      "tvg_id": "CCTV6.cn@HD",
+      "channel_id": "CCTV6.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/rFiaef7.png",
+      "group": "Movies",
+      "category": "央视",
+      "url": "http://69.30.245.50/live/cctv6.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 600,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 200,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.13,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 200,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 200,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-6 [Geo-blocked]",
+      "tvg_id": "CCTV6.cn@SD",
+      "channel_id": "CCTV6.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/rFiaef7.png",
+      "group": "Movies",
+      "category": "央视",
+      "url": "https://live.eac-news.com/CCTV/streams/cctv6.m3u8",
+      "available": false,
+      "stability": {
+        "success_count": 0,
+        "total_rounds": 3,
+        "success_rate": 0.0,
+        "average_response_time": 2.484,
+        "total_bytes": 0,
+        "score": 12.0,
+        "rounds": [
+          {
+            "success": false,
+            "status": null,
+            "response_time": 6.6,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "HTTPError: HTTP Error 404: Not Found"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 0.57,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "HTTPError: HTTP Error 404: Not Found"
+          },
+          {
+            "success": false,
+            "status": null,
+            "response_time": 0.281,
+            "content_type": "",
+            "bytes_read": 0,
+            "error": "HTTPError: HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "basic check failed"
+      },
+      "final_score": 0
+    },
+    {
+      "name": "CCTV-7 (720p)",
+      "tvg_id": "CCTV7.cn@SD",
+      "channel_id": "CCTV7.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/CKcPMQC.png",
+      "group": "Education",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv7hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.466,
+        "total_bytes": 594,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 1.14,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 174,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-8 (720p)",
+      "tvg_id": "CCTV8.cn@SD",
+      "channel_id": "CCTV8.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/GyHaZ8X.png",
+      "group": "Culture",
+      "category": "央视",
+      "url": "http://74.91.26.218:82/live/cctv8hd.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.129,
+        "total_bytes": 630,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.129,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.131,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 210,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": true,
+        "width": 1280,
+        "height": 720,
+        "codec": "h264",
+        "bitrate": null,
+        "fps": "25/1",
+        "is_4k": false,
+        "error": ""
+      },
+      "final_score": 100
+    },
+    {
+      "name": "CCTV-9 (576i)",
+      "tvg_id": "CCTV9.cn@SD",
+      "channel_id": "CCTV9.cn",
+      "feed": "SD",
+      "logo": "https://i.imgur.com/3tivvMm.png",
+      "group": "Documentary",
+      "category": "央视",
+      "url": "https://xykt-fix.github.io/Y77.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.038,
+        "total_bytes": 4986,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.092,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 1662,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.01,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 1662,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.012,
+            "content_type": "application/vnd.apple.mpegurl",
+            "bytes_read": 1662,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "ffprobe timeout"
+      },
+      "final_score": 100.0
+    },
+    {
+      "name": "CCTV-4K (1080p)",
+      "tvg_id": "CCTV4K.cn@HD",
+      "channel_id": "CCTV4K.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/fxusYlX.png",
+      "group": "General",
+      "category": "央视4K",
+      "url": "http://198.204.240.250:82/live/cctv4k.m3u8",
+      "available": true,
+      "stability": {
+        "success_count": 3,
+        "total_rounds": 3,
+        "success_rate": 1.0,
+        "average_response_time": 0.128,
+        "total_bytes": 282,
+        "score": 100.0,
+        "rounds": [
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 94,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.128,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 94,
+            "error": ""
+          },
+          {
+            "success": true,
+            "status": 200,
+            "response_time": 0.127,
+            "content_type": "text/html; charset=UTF-8",
+            "bytes_read": 94,
+            "error": ""
+          }
+        ]
+      },
+      "media": {
+        "available": true,
+        "success": false,
+        "width": null,
+        "height": null,
+        "codec": "",
+        "bitrate": null,
+        "fps": null,
+        "is_4k": false,
+        "error": "http://198.204.240.250:82/live/cctv4k.m3u8: Invalid data found when processing input"
+      },
+      "final_score": 100.0
+    }
+  ]
+}
