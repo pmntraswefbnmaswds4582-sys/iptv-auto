@@ -22,10 +22,10 @@ TIMEOUT = 20
 # ============================================================
 # 精确频道 ID
 #
-# 不再使用：
-# Phoenix / Guangdong / Sports 等模糊关键词
-#
-# 只认 tvg-id
+# 铁规则：
+# 只按照 tvg-id 判断。
+# 不根据频道名称猜测。
+# 不使用 Phoenix / Guangdong / Sports 等关键词。
 # ============================================================
 
 EXACT_CHANNELS = {
@@ -57,7 +57,7 @@ EXACT_CHANNELS = {
     "CCTV4K.cn",
 
     # --------------------------------------------------------
-    # 凤凰
+    # 凤凰卫视
     # --------------------------------------------------------
 
     "PhoenixChineseChannel.hk",
@@ -67,9 +67,6 @@ EXACT_CHANNELS = {
     # 广东
     # --------------------------------------------------------
 
-    "GuangdongSports.cn",
-
-    # 常见广东电视台频道
     "GuangdongTV.cn",
     "GuangdongNews.cn",
     "GuangdongZhujiang.cn",
@@ -77,42 +74,26 @@ EXACT_CHANNELS = {
     "GuangdongFilm.cn",
     "GuangdongPublic.cn",
     "GuangdongChildren.cn",
+    "GuangdongSports.cn",
 }
 
 
 # ============================================================
-# 港澳台
-#
-# 这里不通过频道名称判断。
-#
-# tvg-id 必须明确属于：
-#
-# .hk = 香港
-# .mo = 澳门
-# .tw = 台湾
-#
-# 因此不会把 Phoenix AZ 这种美国频道混进来。
-# ============================================================
-
-REGION_SUFFIXES = (
-    ".hk",
-    ".mo",
-    ".tw",
-)
-
-
-# ============================================================
-# 下载
+# 下载 M3U
 # ============================================================
 
 def download(url):
 
-    print(f"[下载] {url}")
+    print(
+        f"[下载] {url}"
+    )
 
     request = Request(
         url,
         headers={
-            "User-Agent": "iptv-auto/2.0"
+            "User-Agent":
+                "Mozilla/5.0 "
+                "(compatible; IPTV-Auto/3.0)"
         }
     )
 
@@ -130,7 +111,7 @@ def download(url):
 
 
 # ============================================================
-# 判断是否为目标频道
+# 判断目标频道
 # ============================================================
 
 def is_target_channel(tvg_id):
@@ -138,42 +119,31 @@ def is_target_channel(tvg_id):
     if not tvg_id:
         return False
 
-    tvg_id = tvg_id.strip()
-
-    # 精确频道
-    if tvg_id in EXACT_CHANNELS:
-        return True
-
-    # 港澳台：
-    # 必须以明确地区后缀结尾
-    if tvg_id.endswith(
-        REGION_SUFFIXES
-    ):
-        return True
-
-    return False
+    return (
+        tvg_id.strip()
+        in EXACT_CHANNELS
+    )
 
 
 # ============================================================
 # 分类
 # ============================================================
 
-def classify_channel(
-    tvg_id,
-    name
-):
+def classify_channel(tvg_id):
 
-    tvg_id_lower = tvg_id.lower()
+    tvg_id_lower = (
+        tvg_id.lower()
+    )
 
-    name_lower = name.lower()
+    # CCTV 4K
+    if tvg_id_lower == "cctv4k.cn":
+
+        return "央视4K"
 
     # CCTV
     if tvg_id_lower.startswith(
         "cctv"
     ):
-
-        if tvg_id_lower == "cctv4k.cn":
-            return "央视4K"
 
         return "央视"
 
@@ -190,29 +160,84 @@ def classify_channel(
 
         return "广东体育"
 
-    # 广东其他
+    # 广东
     if tvg_id.startswith(
         "Guangdong"
     ):
 
         return "广东"
 
-    # 香港
-    if tvg_id.endswith(".hk"):
-
-        return "香港"
-
-    # 澳门
-    if tvg_id.endswith(".mo"):
-
-        return "澳门"
-
-    # 台湾
-    if tvg_id.endswith(".tw"):
-
-        return "台湾"
-
     return "其他"
+
+
+# ============================================================
+# 解析 EXTINF
+# ============================================================
+
+def parse_extinf(line):
+
+    tvg_id_match = re.search(
+        r'tvg-id="([^"]*)"',
+        line,
+        re.IGNORECASE
+    )
+
+    if not tvg_id_match:
+
+        return None
+
+    tvg_id = (
+        tvg_id_match
+        .group(1)
+        .strip()
+    )
+
+    group_match = re.search(
+        r'group-title="([^"]*)"',
+        line,
+        re.IGNORECASE
+    )
+
+    logo_match = re.search(
+        r'tvg-logo="([^"]*)"',
+        line,
+        re.IGNORECASE
+    )
+
+    if "," in line:
+
+        name = (
+            line
+            .split(",", 1)[1]
+            .strip()
+        )
+
+    else:
+
+        name = tvg_id
+
+    return {
+
+        "tvg_id":
+            tvg_id,
+
+        "name":
+            name,
+
+        "group":
+            (
+                group_match.group(1)
+                if group_match
+                else ""
+            ),
+
+        "logo":
+            (
+                logo_match.group(1)
+                if logo_match
+                else ""
+            ),
+    }
 
 
 # ============================================================
@@ -222,9 +247,9 @@ def classify_channel(
 def parse_m3u(text):
 
     lines = [
-        x.strip()
-        for x in text.splitlines()
-        if x.strip()
+        line.strip()
+        for line in text.splitlines()
+        if line.strip()
     ]
 
     channels = []
@@ -253,34 +278,32 @@ def parse_m3u(text):
             current_info
             and not line.startswith("#")
             and (
-                line.startswith("http://")
-                or line.startswith("https://")
+                line.startswith(
+                    "http://"
+                )
+                or
+                line.startswith(
+                    "https://"
+                )
             )
         ):
 
-            # ------------------------------------------------
-            # tvg-id
-            # ------------------------------------------------
-
-            tvg_id_match = re.search(
-                r'tvg-id="([^"]*)"',
-                current_info,
-                re.IGNORECASE
+            info = parse_extinf(
+                current_info
             )
 
-            if not tvg_id_match:
+            if not info:
 
                 current_info = None
 
                 continue
 
-            tvg_id = (
-                tvg_id_match.group(1)
-                .strip()
-            )
+            tvg_id = info[
+                "tvg_id"
+            ]
 
             # ------------------------------------------------
-            # 精确频道过滤
+            # 精确过滤
             # ------------------------------------------------
 
             if not is_target_channel(
@@ -291,72 +314,29 @@ def parse_m3u(text):
 
                 continue
 
-            # ------------------------------------------------
-            # 频道名称
-            # ------------------------------------------------
-
-            if "," in current_info:
-
-                name = (
-                    current_info
-                    .split(",", 1)[1]
-                    .strip()
-                )
-
-            else:
-
-                name = tvg_id
-
-            # ------------------------------------------------
-            # group
-            # ------------------------------------------------
-
-            group_match = re.search(
-                r'group-title="([^"]*)"',
-                current_info,
-                re.IGNORECASE
-            )
-
-            group = (
-                group_match.group(1)
-                if group_match
-                else ""
-            )
-
-            # ------------------------------------------------
-            # logo
-            # ------------------------------------------------
-
-            logo_match = re.search(
-                r'tvg-logo="([^"]*)"',
-                current_info,
-                re.IGNORECASE
-            )
-
-            logo = (
-                logo_match.group(1)
-                if logo_match
-                else ""
-            )
-
             category = classify_channel(
-                tvg_id,
-                name
+                tvg_id
             )
 
             channels.append({
 
-                "name": name,
+                "name":
+                    info["name"],
 
-                "tvg_id": tvg_id,
+                "tvg_id":
+                    tvg_id,
 
-                "logo": logo,
+                "logo":
+                    info["logo"],
 
-                "group": group,
+                "group":
+                    info["group"],
 
-                "category": category,
+                "category":
+                    category,
 
-                "url": line
+                "url":
+                    line,
             })
 
             current_info = None
@@ -366,6 +346,11 @@ def parse_m3u(text):
 
 # ============================================================
 # 去重
+#
+# 同一个 tvg-id + URL 才算重复。
+#
+# 同一频道不同 URL 必须保留，
+# 因为后面的 check.py 要从多个源里选择最佳源。
 # ============================================================
 
 def clean_channels(channels):
@@ -376,23 +361,18 @@ def clean_channels(channels):
 
     for channel in channels:
 
-        tvg_id = channel[
-            "tvg_id"
-        ]
-
-        url = channel[
-            "url"
-        ]
-
         key = (
-            tvg_id,
-            url
+            channel["tvg_id"],
+            channel["url"],
         )
 
         if key in seen:
+
             continue
 
-        seen.add(key)
+        seen.add(
+            key
+        )
 
         result.append(
             channel
@@ -402,55 +382,10 @@ def clean_channels(channels):
 
 
 # ============================================================
-# 主程序
+# 统计
 # ============================================================
 
-def main():
-
-    OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    print(
-        "=============================="
-    )
-
-    print(
-        " IPTV 精确频道发现系统"
-    )
-
-    print(
-        "=============================="
-    )
-
-    text = download(
-        SOURCE_URL
-    )
-
-    print(
-        "[解析] 开始解析 M3U"
-    )
-
-    channels = parse_m3u(
-        text
-    )
-
-    print(
-        f"[精确筛选] {len(channels)}"
-    )
-
-    channels = clean_channels(
-        channels
-    )
-
-    print(
-        f"[去重后] {len(channels)}"
-    )
-
-    # --------------------------------------------------------
-    # 分类统计
-    # --------------------------------------------------------
+def make_statistics(channels):
 
     statistics = {}
 
@@ -469,20 +404,167 @@ def main():
             ) + 1
         )
 
-    print(
-        "------------------------------"
+    return statistics
+
+
+# ============================================================
+# 目标频道命中统计
+# ============================================================
+
+def make_channel_statistics(channels):
+
+    result = {}
+
+    for channel in channels:
+
+        tvg_id = channel[
+            "tvg_id"
+        ]
+
+        result[tvg_id] = (
+            result.get(
+                tvg_id,
+                0
+            ) + 1
+        )
+
+    return result
+
+
+# ============================================================
+# 主程序
+# ============================================================
+
+def main():
+
+    OUTPUT_DIR.mkdir(
+        parents=True,
+        exist_ok=True
     )
 
-    for category, count in sorted(
-        statistics.items()
-    ):
+    print(
+        "========================================"
+    )
+
+    print(
+        " IPTV 精确频道发现系统 v3"
+    )
+
+    print(
+        "========================================"
+    )
+
+    # --------------------------------------------------------
+    # 下载
+    # --------------------------------------------------------
+
+    text = download(
+        SOURCE_URL
+    )
+
+    print(
+        f"[下载完成] "
+        f"{len(text):,} 字符"
+    )
+
+    # --------------------------------------------------------
+    # 解析
+    # --------------------------------------------------------
+
+    print(
+        "[解析] 开始解析 M3U"
+    )
+
+    channels = parse_m3u(
+        text
+    )
+
+    print(
+        f"[精确筛选] "
+        f"{len(channels)}"
+    )
+
+    # --------------------------------------------------------
+    # 去重
+    # --------------------------------------------------------
+
+    channels = clean_channels(
+        channels
+    )
+
+    print(
+        f"[去重后] "
+        f"{len(channels)}"
+    )
+
+    # --------------------------------------------------------
+    # 分类统计
+    # --------------------------------------------------------
+
+    statistics = make_statistics(
+        channels
+    )
+
+    print(
+        "----------------------------------------"
+    )
+
+    print(
+        "[分类统计]"
+    )
+
+    if statistics:
+
+        for category, count in sorted(
+            statistics.items()
+        ):
+
+            print(
+                f"  {category}: {count}"
+            )
+
+    else:
 
         print(
-            f"{category}: {count}"
+            "  没有匹配频道"
         )
 
     print(
-        "------------------------------"
+        "----------------------------------------"
+    )
+
+    # --------------------------------------------------------
+    # 频道 ID 统计
+    # --------------------------------------------------------
+
+    channel_statistics = (
+        make_channel_statistics(
+            channels
+        )
+    )
+
+    print(
+        "[频道 ID]"
+    )
+
+    if channel_statistics:
+
+        for tvg_id, count in sorted(
+            channel_statistics.items()
+        ):
+
+            print(
+                f"  {tvg_id}: {count}"
+            )
+
+    else:
+
+        print(
+            "  没有匹配 ID"
+        )
+
+    print(
+        "----------------------------------------"
     )
 
     # --------------------------------------------------------
@@ -503,16 +585,21 @@ def main():
         "statistics":
             statistics,
 
+        "channel_statistics":
+            channel_statistics,
+
         "channels":
-            channels
+            channels,
     }
 
     RAW_FILE.write_text(
+
         json.dumps(
             data,
             ensure_ascii=False,
             indent=2
         ),
+
         encoding="utf-8"
     )
 
@@ -521,7 +608,7 @@ def main():
     )
 
     print(
-        "=============================="
+        "========================================"
     )
 
 
