@@ -13,32 +13,145 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ==================================================
+      # 获取代码
+      # ==================================================
+
       - name: 获取代码
         uses: actions/checkout@v4
+
+
+      # ==================================================
+      # 安装 Python
+      # ==================================================
 
       - name: 安装 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
+
+      # ==================================================
+      # 安装 FFmpeg / ffprobe
+      # ==================================================
+
+      - name: 安装 FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+          echo "FFmpeg版本："
+          ffmpeg -version | head -n 1
+
+          echo "ffprobe版本："
+          ffprobe -version | head -n 1
+
+
+      # ==================================================
+      # 自动发现公开 IPTV 源
+      # ==================================================
+
       - name: 自动发现公开 IPTV 源
         run: |
           python scripts/discover.py
+
+
+      # ==================================================
+      # 检测直播源
+      # ==================================================
 
       - name: 检测直播源
         run: |
           python scripts/check.py
 
+
+      # ==================================================
+      # 显示检测结果
+      # ==================================================
+
+      - name: 显示检测结果
+        run: |
+          echo "=========================================="
+          echo "IPTV 检测结果"
+          echo "=========================================="
+
+          if [ -f output/checked.json ]; then
+
+            python - <<'PY'
+          import json
+
+          with open(
+              "output/checked.json",
+              "r",
+              encoding="utf-8"
+          ) as f:
+              data = json.load(f)
+
+          print(
+              "候选源：",
+              data.get(
+                  "input_channel_count",
+                  0
+              )
+          )
+
+          print(
+              "可用源：",
+              data.get(
+                  "available_source_count",
+                  0
+              )
+          )
+
+          print(
+              "真 4K：",
+              data.get(
+                  "true_4k_source_count",
+                  0
+              )
+          )
+
+          print(
+              "最佳频道：",
+              data.get(
+                  "best_channel_count",
+                  0
+              )
+          )
+          PY
+
+          else
+
+            echo "错误：output/checked.json 不存在"
+            exit 1
+
+          fi
+
+
+      # ==================================================
+      # 保存更新结果
+      # ==================================================
+
       - name: 保存更新结果
         run: |
+
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add output/
 
           if git diff --cached --quiet; then
+
             echo "没有新的变化"
+
           else
-            git commit -m "自动更新 IPTV 源"
+
+            git commit \
+              -m "自动更新 IPTV 源"
+
             git push
+
           fi
