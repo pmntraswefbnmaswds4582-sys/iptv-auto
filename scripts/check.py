@@ -1,6 +1,7 @@
 from urllib.request import Request, urlopen
 from urllib.parse import urljoin
 from pathlib import Path
+import json
 import re
 import time
 
@@ -8,14 +9,15 @@ import time
 INPUT_FILE = Path("output/discovered.json")
 OUTPUT_DIR = Path("output")
 
-TIMEOUT = 10
+# 单个源最多等待 3 秒
+TIMEOUT = 3
 
-# 单个频道最多保留几个候选源
-MAX_SOURCES_PER_CHANNEL = 3
+# 每个频道最多保留 2 个候选源
+MAX_CANDIDATES = 2
 
 
 # ============================================================
-# HTTP 请求
+# HTTP
 # ============================================================
 
 def fetch(url, timeout=TIMEOUT):
@@ -34,106 +36,73 @@ def fetch(url, timeout=TIMEOUT):
         timeout=timeout
     ) as response:
 
-        data = response.read()
+        data = response.read(256000)
 
-        elapsed = time.monotonic() - start
-
-        return (
-            data.decode(
-                "utf-8",
-                errors="ignore"
-            ),
-            elapsed
-        )
-
-
-# ============================================================
-# 判断是否为 M3U8
-# ============================================================
-
-def is_m3u8(text):
+    elapsed = time.monotonic() - start
 
     return (
-        "#EXTM3U" in text
-        or "#EXT-X-" in text
+        data.decode(
+            "utf-8",
+            errors="ignore"
+        ),
+        int(elapsed * 1000)
     )
 
 
 # ============================================================
-# 提取分辨率
+# 分辨率
 # ============================================================
 
 def get_resolutions(text):
 
-    results = []
+    result = []
 
-    matches = re.findall(
+    for width, height in re.findall(
         r'RESOLUTION=(\d+)x(\d+)',
         text,
         re.IGNORECASE
-    )
+    ):
 
-    for width, height in matches:
-
-        results.append(
+        result.append(
             (
                 int(width),
                 int(height)
             )
         )
 
-    return results
+    return result
 
 
 # ============================================================
-# 判断是否真 4K
+# Master Playlist
 # ============================================================
 
-def is_real_4k(resolutions):
+def get_variants(url, text):
 
-    for width, height in resolutions:
-
-        if (
-            width >= 3840
-            and height >= 2160
-        ):
-
-            return True
-
-    return False
-
-
-# ============================================================
-# 找 Master Playlist 中的子播放列表
-# ============================================================
-
-def find_variant_playlists(
-    playlist_url,
-    text
-):
+    lines = [
+        x.strip()
+        for x in text.splitlines()
+        if x.strip()
+    ]
 
     variants = []
 
-    lines = [
-        line.strip()
-        for line in text.splitlines()
-        if line.strip()
-    ]
-
-    for index, line in enumerate(lines):
+    for i, line in enumerate(lines):
 
         if (
-            line.startswith("#EXT-X-STREAM-INF")
-            and index + 1 < len(lines)
+            line.startswith(
+                "#EXT-X-STREAM-INF"
+            )
+            and i + 1 < len(lines)
         ):
 
-            next_line = lines[index + 1]
+            next_line = lines[i + 1]
 
             if not next_line.startswith("#"):
 
                 variants.append(
                     urljoin(
-                        playlist_url,
+                        url,
                         next_line
                     )
                 )
@@ -142,207 +111,143 @@ def find_variant_playlists(
 
 
 # ============================================================
-# 检测直播分片
+# 频道是否值得检测
 # ============================================================
 
-def check_segments(
-    playlist_url,
-    text
-):
+def wanted_channel(channel):
 
-    lines = [
-        line.strip()
-        for line in text.splitlines()
-        if line.strip()
+    text = " ".join([
+        channel.get("name", ""),
+        channel.get("tvg_id", ""),
+        channel.get("group", ""),
+    ]).lower()
+
+    keywords = [
+
+        # CCTV
+        "cctv",
+
+        # 凤凰
+        "凤凰",
+        "鳳凰",
+        "phoenix",
+
+        # 广东
+        "广东",
+        "廣東",
+        "guangdong",
+
+        # 体育
+        "体育",
+        "體育",
+        "sports",
+
+        # 香港
+        "香港",
+        "hong kong",
+        "hk",
+
+        # 澳门
+        "澳门",
+        "澳門",
+        "macau",
+        "macao",
+
+        # 台湾
+        "台湾",
+        "台灣",
+        "taiwan",
     ]
 
-    segment_urls = []
-
-    for line in lines:
-
-        if line.startswith("#"):
-            continue
-
-        if (
-            line.startswith("http://")
-            or line.startswith("https://")
-        ):
-
-            segment_urls.append(line)
-
-        else:
-
-            segment_urls.append(
-                urljoin(
-                    playlist_url,
-                    line
-                )
-            )
-
-    # 只检测最后几个分片
-    segment_urls = segment_urls[-3:]
-
-    if not segment_urls:
-
-        return False
-
-    success = 0
-
-    for segment in segment_urls:
-
-        try:
-
-            request = Request(
-                segment,
-                headers={
-                    "User-Agent":
-                        "iptv-auto/1.0"
-                }
-            )
-
-            with urlopen(
-                request,
-                timeout=TIMEOUT
-            ) as response:
-
-                # 不需要下载完整视频
-                response.read(1024)
-
-                success += 1
-
-        except Exception:
-
-            pass
-
-    return success >= 1
+    return any(
+        keyword in text
+        for keyword in keywords
+    )
 
 
 # ============================================================
 # 检测单个源
 # ============================================================
 
-def check_source(channel):
+def check(channel):
 
     url = channel["url"]
 
-    result = {
-        "url": url,
-        "name": channel["name"],
-        "category": channel.get(
-            "category",
-            "其他"
-        ),
-        "reachable": False,
-        "is_hls": False,
-        "real_4k": False,
-        "width": 0,
-        "height": 0,
-        "response_ms": 0,
-        "segments_ok": False,
-        "score": 0,
-    }
+    result = dict(channel)
+
+    result["reachable"] = False
+    result["hls"] = False
+    result["width"] = 0
+    result["height"] = 0
+    result["real_4k"] = False
+    result["response_ms"] = 0
+    result["score"] = 0
 
     try:
 
-        text, elapsed = fetch(url)
+        text, response_ms = fetch(url)
 
         result["reachable"] = True
+        result["response_ms"] = response_ms
 
-        result["response_ms"] = int(
-            elapsed * 1000
-        )
+        # 不是 M3U8
+        if "#EXTM3U" not in text:
 
-        if not is_m3u8(text):
-
-            # 有些地址不是标准 M3U8
-            # 但 HTTP 本身可以访问
             result["score"] = 20
 
             return result
 
-        result["is_hls"] = True
+        result["hls"] = True
 
         resolutions = get_resolutions(
             text
         )
 
+        variants = get_variants(
+            url,
+            text
+        )
+
+        # Master Playlist
+        # 只检查最多两个 Variant
+        for variant in variants[:2]:
+
+            try:
+
+                variant_text, _ = fetch(
+                    variant,
+                    timeout=2
+                )
+
+                resolutions.extend(
+                    get_resolutions(
+                        variant_text
+                    )
+                )
+
+            except Exception:
+
+                pass
+
+        # 选择最高分辨率
         if resolutions:
 
             width, height = max(
                 resolutions,
-                key=lambda x: x[0] * x[1]
+                key=lambda x:
+                x[0] * x[1]
             )
 
             result["width"] = width
             result["height"] = height
 
-        # Master Playlist
-        variants = find_variant_playlists(
-            url,
-            text
-        )
-
-        # 如果有 Master Playlist，
-        # 继续检测最高分辨率子流
-        if variants:
-
-            variant_results = []
-
-            for variant in variants:
-
-                try:
-
-                    variant_text, _ = fetch(
-                        variant,
-                        timeout=8
-                    )
-
-                    variant_resolutions = (
-                        get_resolutions(
-                            text
-                        )
-                    )
-
-                    variant_results.extend(
-                        variant_resolutions
-                    )
-
-                    # 找最高分辨率
-                    if variant_resolutions:
-
-                        w, h = max(
-                            variant_resolutions,
-                            key=lambda x:
-                            x[0] * x[1]
-                        )
-
-                        if (
-                            w * h
-                            >
-                            result["width"]
-                            *
-                            result["height"]
-                        ):
-
-                            result["width"] = w
-                            result["height"] = h
-
-                except Exception:
-
-                    pass
-
-        result["real_4k"] = (
+        # 真 4K
+        if (
             result["width"] >= 3840
             and result["height"] >= 2160
-        )
+        ):
 
-        # 检测媒体分片
-        result["segments_ok"] = (
-            check_segments(
-                url,
-                text
-            )
-        )
+            result["real_4k"] = True
 
         # ====================================================
         # 评分
@@ -350,54 +255,43 @@ def check_source(channel):
 
         score = 0
 
-        if result["reachable"]:
-            score += 20
+        score += 20
 
-        if result["is_hls"]:
-            score += 20
-
-        if result["segments_ok"]:
-            score += 30
-
-        if result["real_4k"]:
+        if result["hls"]:
             score += 25
 
+        if result["real_4k"]:
+            score += 40
+
         elif result["width"] >= 1920:
-            score += 15
+            score += 25
 
         elif result["width"] >= 1280:
-            score += 8
+            score += 15
 
-        # 响应速度
-        if result["response_ms"] <= 1000:
+        elif result["width"] >= 720:
             score += 5
 
+        if result["response_ms"] <= 500:
+            score += 15
+
+        elif result["response_ms"] <= 1500:
+            score += 10
+
         elif result["response_ms"] <= 2500:
-            score += 3
+            score += 5
 
         result["score"] = score
 
         return result
 
-    except Exception as error:
-
-        print(
-            f"[失败] {channel['name']}"
-        )
-
-        print(
-            f"       {url}"
-        )
-
-        print(
-            f"       {error}"
-        )
+    except Exception:
 
         return result
 
 
 # ============================================================
-# 写 M3U
+# M3U
 # ============================================================
 
 def write_m3u(
@@ -413,11 +307,6 @@ def write_m3u(
 
         name = channel["name"]
 
-        category = channel.get(
-            "category",
-            "其他"
-        )
-
         tvg_id = channel.get(
             "tvg_id",
             ""
@@ -426,6 +315,11 @@ def write_m3u(
         logo = channel.get(
             "logo",
             ""
+        )
+
+        category = channel.get(
+            "category",
+            "其他"
         )
 
         width = channel.get(
@@ -440,21 +334,17 @@ def write_m3u(
 
         if width and height:
 
-            display_name = (
+            name = (
                 f"{name} "
                 f"({width}x{height})"
             )
-
-        else:
-
-            display_name = name
 
         lines.append(
             f'#EXTINF:-1 '
             f'tvg-id="{tvg_id}" '
             f'tvg-logo="{logo}" '
             f'group-title="{category}",'
-            f'{display_name}'
+            f'{name}'
         )
 
         lines.append(
@@ -466,14 +356,6 @@ def write_m3u(
         encoding="utf-8"
     )
 
-    print(
-        f"[生成] {filename}"
-    )
-
-    print(
-        f"       {len(channels)} 个源"
-    )
-
 
 # ============================================================
 # 主程序
@@ -481,70 +363,60 @@ def write_m3u(
 
 def main():
 
+    print(
+        "=============================="
+    )
+
+    print(
+        " IPTV 快速直播源检测"
+    )
+
+    print(
+        "=============================="
+    )
+
     if not INPUT_FILE.exists():
 
         raise SystemExit(
-            "找不到 output/discovered.json"
+            "找不到 discovered.json"
         )
 
-    data = INPUT_FILE.read_text(
-        encoding="utf-8"
+    data = json.loads(
+        INPUT_FILE.read_text(
+            encoding="utf-8"
+        )
     )
 
-    import json
-
-    parsed = json.loads(data)
-
-    channels = parsed.get(
+    all_channels = data.get(
         "channels",
         []
     )
 
-    print(
-        f"[候选源] {len(channels)}"
-    )
+    # --------------------------------------------------------
+    # 只筛选目标频道
+    # --------------------------------------------------------
 
-    checked = []
-
-    # ========================================================
-    # 检测
-    # ========================================================
-
-    for index, channel in enumerate(
-        channels,
-        start=1
-    ):
-
-        print(
-            f"[{index}/{len(channels)}] "
-            f"{channel['name']}"
-        )
-
-        result = check_source(
-            channel
-        )
-
-        if result["reachable"]:
-
-            merged = dict(channel)
-
-            merged.update(result)
-
-            checked.append(
-                merged
-            )
+    candidates = [
+        channel
+        for channel in all_channels
+        if wanted_channel(channel)
+    ]
 
     print(
-        f"[可访问] {len(checked)}"
+        f"[全部源] {len(all_channels)}"
     )
 
-    # ========================================================
-    # 按频道名称分组
-    # ========================================================
+    print(
+        f"[目标源] {len(candidates)}"
+    )
+
+    # --------------------------------------------------------
+    # 每个频道最多检测两个源
+    # --------------------------------------------------------
 
     grouped = {}
 
-    for channel in checked:
+    for channel in candidates:
 
         key = (
             channel["name"]
@@ -557,117 +429,163 @@ def main():
             []
         ).append(channel)
 
-    best_channels = []
+    selected = []
 
-    # ========================================================
-    # 每个频道选择最佳源
-    # ========================================================
+    for name, items in grouped.items():
 
-    for name, candidates in grouped.items():
+        # 优先不同 URL
+        seen = set()
 
-        candidates.sort(
-            key=lambda x: (
-                x["real_4k"],
-                x["score"],
-                x["width"],
-                x["height"],
-                -x["response_ms"]
-            ),
-            reverse=True
+        unique = []
+
+        for item in items:
+
+            if item["url"] in seen:
+                continue
+
+            seen.add(
+                item["url"]
+            )
+
+            unique.append(item)
+
+        # 最多两个
+        selected.extend(
+            unique[:MAX_CANDIDATES]
         )
 
-        best_channels.append(
-            candidates[0]
+    print(
+        f"[实际检测] {len(selected)}"
+    )
+
+    # --------------------------------------------------------
+    # 检测
+    # --------------------------------------------------------
+
+    checked = []
+
+    for index, channel in enumerate(
+        selected,
+        start=1
+    ):
+
+        print(
+            f"[检测 {index}/{len(selected)}] "
+            f"{channel['name']}"
         )
 
-    # ========================================================
+        result = check(channel)
+
+        if result["reachable"]:
+
+            checked.append(result)
+
+            print(
+                f"  -> "
+                f"{result['width']}x"
+                f"{result['height']} "
+                f"{result['response_ms']}ms "
+                f"score={result['score']}"
+            )
+
+    # --------------------------------------------------------
+    # 每频道选择最佳
+    # --------------------------------------------------------
+
+    best = {}
+
+    for channel in checked:
+
+        key = (
+            channel["name"]
+            .strip()
+            .lower()
+        )
+
+        if (
+            key not in best
+            or channel["score"]
+            > best[key]["score"]
+        ):
+
+            best[key] = channel
+
+    best_channels = list(
+        best.values()
+    )
+
+    # --------------------------------------------------------
     # 分类
-    # ========================================================
+    # --------------------------------------------------------
 
     cctv_4k = [
-        x
-        for x in best_channels
-        if x["real_4k"]
-        and (
-            "CCTV"
-            in x["name"].upper()
+        x for x in best_channels
+        if (
+            "cctv"
+            in x["name"].lower()
+            and x["real_4k"]
         )
     ]
 
     cctv_hd = [
-        x
-        for x in best_channels
+        x for x in best_channels
         if (
-            "CCTV"
-            in x["name"].upper()
+            "cctv"
+            in x["name"].lower()
+            and not x["real_4k"]
+            and x["width"] >= 1280
         )
-        and not x["real_4k"]
-        and x["width"] >= 1280
     ]
 
     phoenix = [
-        x
-        for x in best_channels
-        if x["category"]
+        x for x in best_channels
+        if x.get("category")
         == "凤凰卫视"
     ]
 
     guangdong = [
-        x
-        for x in best_channels
-        if x["category"]
+        x for x in best_channels
+        if x.get("category")
         == "广东"
     ]
 
     sports = [
-        x
-        for x in best_channels
-        if x["category"]
+        x for x in best_channels
+        if x.get("category")
         == "体育"
     ]
 
     hongkong = [
-        x
-        for x in best_channels
-        if x["category"]
+        x for x in best_channels
+        if x.get("category")
         == "香港"
     ]
 
     macau = [
-        x
-        for x in best_channels
-        if x["category"]
+        x for x in best_channels
+        if x.get("category")
         == "澳门"
     ]
 
     taiwan = [
-        x
-        for x in best_channels
-        if x["category"]
+        x for x in best_channels
+        if x.get("category")
         == "台湾"
     ]
 
-    # ========================================================
+    # --------------------------------------------------------
     # BEST
-    #
-    # 真4K优先
-    # 但低分4K不能进入
-    # ========================================================
+    # --------------------------------------------------------
 
-    best = sorted(
-        best_channels,
+    best_channels.sort(
         key=lambda x: (
-            x["score"],
             x["real_4k"],
+            x["score"],
             x["width"],
             x["height"]
         ),
         reverse=True
     )
-
-    # ========================================================
-    # 输出
-    # ========================================================
 
     OUTPUT_DIR.mkdir(
         parents=True,
@@ -676,7 +594,7 @@ def main():
 
     write_m3u(
         OUTPUT_DIR / "best.m3u",
-        best
+        best_channels
     )
 
     write_m3u(
@@ -719,20 +637,40 @@ def main():
         taiwan
     )
 
-    # ========================================================
-    # 保存检测报告
-    # ========================================================
+    # --------------------------------------------------------
+    # 检测报告
+    # --------------------------------------------------------
 
     report = {
-        "generated_at": int(time.time()),
-        "candidate_count": len(channels),
-        "reachable_count": len(checked),
-        "best_count": len(best_channels),
-        "real_4k_count": len(cctv_4k),
-        "channels": checked,
+        "generated_at":
+            int(time.time()),
+
+        "all_channels":
+            len(all_channels),
+
+        "target_channels":
+            len(candidates),
+
+        "tested":
+            len(selected),
+
+        "reachable":
+            len(checked),
+
+        "best":
+            len(best_channels),
+
+        "real_4k":
+            len(cctv_4k),
+
+        "channels":
+            checked
     }
 
-    (OUTPUT_DIR / "check_report.json").write_text(
+    (
+        OUTPUT_DIR
+        / "check_report.json"
+    ).write_text(
         json.dumps(
             report,
             ensure_ascii=False,
@@ -742,23 +680,38 @@ def main():
     )
 
     print("")
-    print("==============================")
-    print(" IPTV 检测完成")
-    print("==============================")
     print(
-        f"候选：{len(channels)}"
+        "=============================="
     )
+
+    print(
+        f"全部源：{len(all_channels)}"
+    )
+
+    print(
+        f"目标源：{len(candidates)}"
+    )
+
+    print(
+        f"实际检测：{len(selected)}"
+    )
+
     print(
         f"可访问：{len(checked)}"
     )
+
     print(
         f"最终频道：{len(best_channels)}"
     )
+
     print(
-        f"真4K：{len(cctv_4k)}"
+        f"真正 4K：{len(cctv_4k)}"
+    )
+
+    print(
+        "=============================="
     )
 
 
 if __name__ == "__main__":
-
     main()
