@@ -1,360 +1,839 @@
 from urllib.request import Request, urlopen
-from urllib.parse import urljoin
 from pathlib import Path
 import json
-import re
 import time
+import re
+import subprocess
+import shutil
 
+
+# ============================================================
+# 配置
+# ============================================================
 
 INPUT_FILE = Path("output/discovered.json")
-OUTPUT_DIR = Path("output")
+OUTPUT_FILE = Path("output/checked.json")
 
-# 单个源最多等待 3 秒
-TIMEOUT = 3
+TIMEOUT = 15
 
-# 每个频道最多保留 2 个候选源
-MAX_CANDIDATES = 2
+# 每个直播源检测次数
+CHECK_ROUNDS = 3
+
+# 每次检测读取的数据量
+READ_BYTES = 1024 * 256
+
+# 两次检测之间等待时间
+ROUND_DELAY = 1
+
+# 真正判定 4K 所需的最低宽度
+TRUE_4K_WIDTH = 3840
+
+# 真正判定 4K 所需的最低高度
+TRUE_4K_HEIGHT = 2160
 
 
 # ============================================================
-# HTTP
+# HTTP 请求
 # ============================================================
 
-def fetch(url, timeout=TIMEOUT):
+def open_stream(url):
 
     request = Request(
         url,
         headers={
-            "User-Agent": "iptv-auto/1.0"
+            "User-Agent": (
+                "Mozilla/5.0 "
+                "(Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 "
+                "(KHTML, like Gecko) "
+                "Chrome/136.0 Safari/537.36"
+            ),
+            "Accept": "*/*",
+            "Connection": "close",
         }
     )
 
-    start = time.monotonic()
-
-    with urlopen(
+    return urlopen(
         request,
-        timeout=timeout
-    ) as response:
-
-        data = response.read(256000)
-
-    elapsed = time.monotonic() - start
-
-    return (
-        data.decode(
-            "utf-8",
-            errors="ignore"
-        ),
-        int(elapsed * 1000)
+        timeout=TIMEOUT
     )
 
 
 # ============================================================
-# 分辨率
+# 单次基础检测
 # ============================================================
 
-def get_resolutions(text):
+def basic_check(url):
 
-    result = []
+    result = {
 
-    for width, height in re.findall(
-        r'RESOLUTION=(\d+)x(\d+)',
-        text,
-        re.IGNORECASE
-    ):
+        "success": False,
 
-        result.append(
-            (
-                int(width),
-                int(height)
+        "status": None,
+
+        "response_time": None,
+
+        "content_type": "",
+
+        "bytes_read": 0,
+
+        "error": "",
+    }
+
+    start = time.time()
+
+    try:
+
+        response = open_stream(url)
+
+        result["status"] = response.status
+
+        result["content_type"] = (
+            response.headers.get(
+                "Content-Type",
+                ""
             )
+        )
+
+        data = response.read(
+            READ_BYTES
+        )
+
+        elapsed = time.time() - start
+
+        result["response_time"] = round(
+            elapsed,
+            3
+        )
+
+        result["bytes_read"] = len(
+            data
+        )
+
+        if (
+            response.status >= 200
+            and response.status < 400
+            and len(data) > 0
+        ):
+
+            result["success"] = True
+
+        response.close()
+
+    except Exception as e:
+
+        result["error"] = (
+            f"{type(e).__name__}: {e}"
+        )
+
+        result["response_time"] = round(
+            time.time() - start,
+            3
         )
 
     return result
 
 
 # ============================================================
-# Master Playlist
+# 多次稳定性检测
 # ============================================================
 
-def get_variants(url, text):
+def stability_check(url):
 
-    lines = [
-        x.strip()
-        for x in text.splitlines()
-        if x.strip()
-    ]
+    rounds = []
 
-    variants = []
+    success_count = 0
 
-    for i, line in enumerate(lines):
+    response_times = []
 
-        if (
-            line.startswith(
-                "#EXT-X-STREAM-INF"
+    total_bytes = 0
+
+    for i in range(
+        CHECK_ROUNDS
+    ):
+
+        print(
+            f"      检测 {i + 1}/{CHECK_ROUNDS}"
+        )
+
+        result = basic_check(
+            url
+        )
+
+        rounds.append(
+            result
+        )
+
+        if result["success"]:
+
+            success_count += 1
+
+        if result["response_time"] is not None:
+
+            response_times.append(
+                result["response_time"]
             )
-            and i + 1 < len(lines)
-        ):
 
-            next_line = lines[i + 1]
+        total_bytes += (
+            result["bytes_read"]
+        )
 
-            if not next_line.startswith("#"):
+        if i < CHECK_ROUNDS - 1:
 
-                variants.append(
-                    urljoin(
-                        url,
-                        next_line
-                    )
-                )
+            time.sleep(
+                ROUND_DELAY
+            )
 
-    return variants
-
-
-# ============================================================
-# 频道是否值得检测
-# ============================================================
-
-def wanted_channel(channel):
-
-    text = " ".join([
-        channel.get("name", ""),
-        channel.get("tvg_id", ""),
-        channel.get("group", ""),
-    ]).lower()
-
-    keywords = [
-
-        # CCTV
-        "cctv",
-
-        # 凤凰
-        "凤凰",
-        "鳳凰",
-        "phoenix",
-
-        # 广东
-        "广东",
-        "廣東",
-        "guangdong",
-
-        # 体育
-        "体育",
-        "體育",
-        "sports",
-
-        # 香港
-        "香港",
-        "hong kong",
-        "hk",
-
-        # 澳门
-        "澳门",
-        "澳門",
-        "macau",
-        "macao",
-
-        # 台湾
-        "台湾",
-        "台灣",
-        "taiwan",
-    ]
-
-    return any(
-        keyword in text
-        for keyword in keywords
+    success_rate = (
+        success_count
+        / CHECK_ROUNDS
     )
 
+    if response_times:
+
+        avg_response = round(
+            sum(response_times)
+            / len(response_times),
+            3
+        )
+
+    else:
+
+        avg_response = None
+
+    # --------------------------------------------------------
+    # 稳定性评分
+    # --------------------------------------------------------
+
+    score = 0
+
+    # 成功率最高 70 分
+    score += (
+        success_rate * 70
+    )
+
+    # 响应速度最高 20 分
+    if avg_response is not None:
+
+        if avg_response <= 1:
+
+            score += 20
+
+        elif avg_response <= 2:
+
+            score += 16
+
+        elif avg_response <= 4:
+
+            score += 12
+
+        elif avg_response <= 8:
+
+            score += 6
+
+        else:
+
+            score += 2
+
+    # 有实际数据最高 10 分
+    if total_bytes > 0:
+
+        score += 10
+
+    score = round(
+        score,
+        2
+    )
+
+    return {
+
+        "success_count":
+            success_count,
+
+        "total_rounds":
+            CHECK_ROUNDS,
+
+        "success_rate":
+            round(
+                success_rate,
+                3
+            ),
+
+        "average_response_time":
+            avg_response,
+
+        "total_bytes":
+            total_bytes,
+
+        "score":
+            score,
+
+        "rounds":
+            rounds,
+    }
+
 
 # ============================================================
-# 检测单个源
+# ffprobe 检测
+#
+# 如果 GitHub Actions 环境存在 ffprobe，
+# 则尝试读取真实媒体流信息。
+#
+# 如果不存在，不让整个流程失败。
 # ============================================================
 
-def check(channel):
+def find_ffprobe():
 
-    url = channel["url"]
+    path = shutil.which(
+        "ffprobe"
+    )
 
-    result = dict(channel)
+    return path
 
-    result["reachable"] = False
-    result["hls"] = False
-    result["width"] = 0
-    result["height"] = 0
-    result["real_4k"] = False
-    result["response_ms"] = 0
-    result["score"] = 0
+
+# ============================================================
+# 解析分辨率
+# ============================================================
+
+def parse_resolution(value):
+
+    if not value:
+
+        return None, None
+
+    match = re.search(
+        r"(\d{3,5})\s*[xX]\s*(\d{3,5})",
+        value
+    )
+
+    if not match:
+
+        return None, None
+
+    width = int(
+        match.group(1)
+    )
+
+    height = int(
+        match.group(2)
+    )
+
+    return width, height
+
+
+# ============================================================
+# ffprobe 媒体检测
+# ============================================================
+
+def probe_media(
+    url,
+    ffprobe_path
+):
+
+    result = {
+
+        "available":
+            bool(ffprobe_path),
+
+        "success":
+            False,
+
+        "width":
+            None,
+
+        "height":
+            None,
+
+        "codec":
+            "",
+
+        "bitrate":
+            None,
+
+        "fps":
+            None,
+
+        "is_4k":
+            False,
+
+        "error":
+            "",
+    }
+
+    if not ffprobe_path:
+
+        result["error"] = (
+            "ffprobe not installed"
+        )
+
+        return result
+
+    command = [
+
+        ffprobe_path,
+
+        "-v",
+        "error",
+
+        "-select_streams",
+        "v:0",
+
+        "-show_entries",
+        (
+            "stream="
+            "width,"
+            "height,"
+            "codec_name,"
+            "bit_rate,"
+            "r_frame_rate"
+        ),
+
+        "-of",
+        "json",
+
+        "-timeout",
+        "10000000",
+
+        url,
+    ]
 
     try:
 
-        text, response_ms = fetch(url)
+        completed = subprocess.run(
 
-        result["reachable"] = True
-        result["response_ms"] = response_ms
+            command,
 
-        # 不是 M3U8
-        if "#EXTM3U" not in text:
+            stdout=subprocess.PIPE,
 
-            result["score"] = 20
+            stderr=subprocess.PIPE,
+
+            text=True,
+
+            timeout=TIMEOUT + 10,
+        )
+
+        if completed.returncode != 0:
+
+            result["error"] = (
+                completed.stderr.strip()
+            )
 
             return result
 
-        result["hls"] = True
-
-        resolutions = get_resolutions(
-            text
+        data = json.loads(
+            completed.stdout
         )
 
-        variants = get_variants(
-            url,
-            text
+        streams = data.get(
+            "streams",
+            []
         )
 
-        # Master Playlist
-        # 只检查最多两个 Variant
-        for variant in variants[:2]:
+        if not streams:
+
+            result["error"] = (
+                "no video stream"
+            )
+
+            return result
+
+        stream = streams[0]
+
+        width = stream.get(
+            "width"
+        )
+
+        height = stream.get(
+            "height"
+        )
+
+        result["width"] = width
+
+        result["height"] = height
+
+        result["codec"] = (
+            stream.get(
+                "codec_name"
+            )
+            or ""
+        )
+
+        bitrate = stream.get(
+            "bit_rate"
+        )
+
+        if bitrate:
 
             try:
 
-                variant_text, _ = fetch(
-                    variant,
-                    timeout=2
-                )
-
-                resolutions.extend(
-                    get_resolutions(
-                        variant_text
-                    )
+                result["bitrate"] = int(
+                    bitrate
                 )
 
             except Exception:
 
                 pass
 
-        # 选择最高分辨率
-        if resolutions:
+        fps = stream.get(
+            "r_frame_rate"
+        )
 
-            width, height = max(
-                resolutions,
-                key=lambda x:
-                x[0] * x[1]
-            )
+        result["fps"] = fps
 
-            result["width"] = width
-            result["height"] = height
-
-        # 真 4K
         if (
-            result["width"] >= 3840
-            and result["height"] >= 2160
+            width
+            and height
+            and width >= TRUE_4K_WIDTH
+            and height >= TRUE_4K_HEIGHT
         ):
 
-            result["real_4k"] = True
+            result["is_4k"] = True
 
-        # ====================================================
-        # 评分
-        # ====================================================
+        result["success"] = True
 
-        score = 0
+    except subprocess.TimeoutExpired:
 
-        score += 20
+        result["error"] = (
+            "ffprobe timeout"
+        )
 
-        if result["hls"]:
-            score += 25
+    except Exception as e:
 
-        if result["real_4k"]:
-            score += 40
+        result["error"] = (
+            f"{type(e).__name__}: {e}"
+        )
 
-        elif result["width"] >= 1920:
-            score += 25
-
-        elif result["width"] >= 1280:
-            score += 15
-
-        elif result["width"] >= 720:
-            score += 5
-
-        if result["response_ms"] <= 500:
-            score += 15
-
-        elif result["response_ms"] <= 1500:
-            score += 10
-
-        elif result["response_ms"] <= 2500:
-            score += 5
-
-        result["score"] = score
-
-        return result
-
-    except Exception:
-
-        return result
+    return result
 
 
 # ============================================================
-# M3U
+# 综合评分
 # ============================================================
 
-def write_m3u(
-    filename,
-    channels
+def calculate_final_score(
+    stability,
+    media
 ):
 
-    lines = [
-        "#EXTM3U"
+    score = stability[
+        "score"
     ]
+
+    # --------------------------------------------------------
+    # 真 4K 加分
+    # --------------------------------------------------------
+
+    if media.get(
+        "is_4k",
+        False
+    ):
+
+        score += 25
+
+    # --------------------------------------------------------
+    # 能读取真实视频流
+    # --------------------------------------------------------
+
+    if media.get(
+        "success",
+        False
+    ):
+
+        score += 5
+
+    # --------------------------------------------------------
+    # 最终封顶 100
+    # --------------------------------------------------------
+
+    return round(
+        min(
+            score,
+            100
+        ),
+        2
+    )
+
+
+# ============================================================
+# 检测单个频道源
+# ============================================================
+
+def check_channel(
+    channel,
+    ffprobe_path
+):
+
+    tvg_id = channel[
+        "tvg_id"
+    ]
+
+    name = channel[
+        "name"
+    ]
+
+    url = channel[
+        "url"
+    ]
+
+    print(
+        f"\n  [{tvg_id}] {name}"
+    )
+
+    print(
+        f"      URL: {url}"
+    )
+
+    # --------------------------------------------------------
+    # 稳定性
+    # --------------------------------------------------------
+
+    stability = stability_check(
+        url
+    )
+
+    # --------------------------------------------------------
+    # 如果完全不可用
+    # --------------------------------------------------------
+
+    if stability[
+        "success_count"
+    ] == 0:
+
+        print(
+            "      ❌ 三次检测全部失败"
+        )
+
+        return {
+
+            **channel,
+
+            "available":
+                False,
+
+            "stability":
+                stability,
+
+            "media":
+                {
+
+                    "available":
+                        bool(ffprobe_path),
+
+                    "success":
+                        False,
+
+                    "width":
+                        None,
+
+                    "height":
+                        None,
+
+                    "codec":
+                        "",
+
+                    "bitrate":
+                        None,
+
+                    "fps":
+                        None,
+
+                    "is_4k":
+                        False,
+
+                    "error":
+                        "basic check failed",
+                },
+
+            "final_score":
+                0,
+        }
+
+    print(
+        f"      成功率: "
+        f"{stability['success_rate'] * 100:.1f}%"
+    )
+
+    print(
+        f"      平均响应: "
+        f"{stability['average_response_time']} 秒"
+    )
+
+    print(
+        f"      稳定性评分: "
+        f"{stability['score']}"
+    )
+
+    # --------------------------------------------------------
+    # 媒体检测
+    # --------------------------------------------------------
+
+    media = probe_media(
+        url,
+        ffprobe_path
+    )
+
+    if media[
+        "success"
+    ]:
+
+        print(
+            f"      分辨率: "
+            f"{media['width']}x"
+            f"{media['height']}"
+        )
+
+        print(
+            f"      编码: "
+            f"{media['codec']}"
+        )
+
+        if media[
+            "is_4k"
+        ]:
+
+            print(
+                "      ⭐ 真 4K"
+            )
+
+    else:
+
+        print(
+            "      媒体信息："
+            "暂时无法确认"
+        )
+
+    final_score = calculate_final_score(
+        stability,
+        media
+    )
+
+    print(
+        f"      最终评分: "
+        f"{final_score}"
+    )
+
+    return {
+
+        **channel,
+
+        "available":
+            True,
+
+        "stability":
+            stability,
+
+        "media":
+            media,
+
+        "final_score":
+            final_score,
+    }
+
+
+# ============================================================
+# 按频道分组
+# ============================================================
+
+def group_channels(channels):
+
+    groups = {}
 
     for channel in channels:
 
-        name = channel["name"]
+        tvg_id = channel[
+            "tvg_id"
+        ]
 
-        tvg_id = channel.get(
-            "tvg_id",
-            ""
+        groups.setdefault(
+            tvg_id,
+            []
         )
 
-        logo = channel.get(
-            "logo",
-            ""
+        groups[
+            tvg_id
+        ].append(
+            channel
         )
 
-        category = channel.get(
-            "category",
-            "其他"
+    return groups
+
+
+# ============================================================
+# 选择最佳源
+# ============================================================
+
+def select_best_source(
+    channels
+):
+
+    if not channels:
+
+        return None
+
+    # --------------------------------------------------------
+    # 排序原则：
+    #
+    # 1. 可用
+    # 2. 真 4K
+    # 3. 最终评分
+    # 4. 稳定成功率
+    # 5. 响应速度
+    # --------------------------------------------------------
+
+    def sort_key(channel):
+
+        media = channel.get(
+            "media",
+            {}
         )
 
-        width = channel.get(
-            "width",
-            0
+        stability = channel.get(
+            "stability",
+            {}
         )
 
-        height = channel.get(
-            "height",
-            0
+        response = stability.get(
+            "average_response_time"
         )
 
-        if width and height:
+        if response is None:
 
-            name = (
-                f"{name} "
-                f"({width}x{height})"
+            response = 999999
+
+        return (
+
+            1
+            if channel.get(
+                "available",
+                False
             )
+            else 0,
 
-        lines.append(
-            f'#EXTINF:-1 '
-            f'tvg-id="{tvg_id}" '
-            f'tvg-logo="{logo}" '
-            f'group-title="{category}",'
-            f'{name}'
+            1
+            if media.get(
+                "is_4k",
+                False
+            )
+            else 0,
+
+            channel.get(
+                "final_score",
+                0
+            ),
+
+            stability.get(
+                "success_rate",
+                0
+            ),
+
+            -response,
         )
 
-        lines.append(
-            channel["url"]
-        )
-
-    filename.write_text(
-        "\n".join(lines),
-        encoding="utf-8"
-    )
+    return sorted(
+        channels,
+        key=sort_key,
+        reverse=True
+    )[0]
 
 
 # ============================================================
@@ -364,22 +843,41 @@ def write_m3u(
 def main():
 
     print(
-        "=============================="
+        "================================================"
     )
 
     print(
-        " IPTV 快速直播源检测"
+        " IPTV 直播源稳定性检测系统"
     )
 
     print(
-        "=============================="
+        "================================================"
     )
+
+    # --------------------------------------------------------
+    # 检查输入
+    # --------------------------------------------------------
 
     if not INPUT_FILE.exists():
 
-        raise SystemExit(
-            "找不到 discovered.json"
+        print(
+            f"[错误] 找不到："
+            f"{INPUT_FILE}"
         )
+
+        print(
+            "请先运行 discover.py"
+        )
+
+        return
+
+    # --------------------------------------------------------
+    # 读取 discovered.json
+    # --------------------------------------------------------
+
+    print(
+        f"[读取] {INPUT_FILE}"
+    )
 
     data = json.loads(
         INPUT_FILE.read_text(
@@ -387,331 +885,245 @@ def main():
         )
     )
 
-    all_channels = data.get(
+    channels = data.get(
         "channels",
         []
     )
 
-    # --------------------------------------------------------
-    # 只筛选目标频道
-    # --------------------------------------------------------
-
-    candidates = [
-        channel
-        for channel in all_channels
-        if wanted_channel(channel)
-    ]
-
     print(
-        f"[全部源] {len(all_channels)}"
+        f"[发现] "
+        f"{len(channels)} 个候选源"
     )
 
-    print(
-        f"[目标源] {len(candidates)}"
-    )
+    if not channels:
 
-    # --------------------------------------------------------
-    # 每个频道最多检测两个源
-    # --------------------------------------------------------
-
-    grouped = {}
-
-    for channel in candidates:
-
-        key = (
-            channel["name"]
-            .strip()
-            .lower()
+        print(
+            "[错误] 没有候选频道"
         )
 
-        grouped.setdefault(
-            key,
-            []
-        ).append(channel)
+        return
 
-    selected = []
+    # --------------------------------------------------------
+    # ffprobe
+    # --------------------------------------------------------
 
-    for name, items in grouped.items():
+    ffprobe_path = find_ffprobe()
 
-        # 优先不同 URL
-        seen = set()
+    if ffprobe_path:
 
-        unique = []
-
-        for item in items:
-
-            if item["url"] in seen:
-                continue
-
-            seen.add(
-                item["url"]
-            )
-
-            unique.append(item)
-
-        # 最多两个
-        selected.extend(
-            unique[:MAX_CANDIDATES]
+        print(
+            f"[媒体检测] "
+            f"发现 ffprobe："
+            f"{ffprobe_path}"
         )
 
-    print(
-        f"[实际检测] {len(selected)}"
+    else:
+
+        print(
+            "[媒体检测] "
+            "当前环境没有 ffprobe"
+        )
+
+        print(
+            "后续 GitHub Actions 会安装"
+        )
+
+    # --------------------------------------------------------
+    # 开始检测
+    # --------------------------------------------------------
+
+    checked_channels = []
+
+    total = len(
+        channels
     )
-
-    # --------------------------------------------------------
-    # 检测
-    # --------------------------------------------------------
-
-    checked = []
 
     for index, channel in enumerate(
-        selected,
+        channels,
         start=1
     ):
 
         print(
-            f"[检测 {index}/{len(selected)}] "
-            f"{channel['name']}"
+            "\n------------------------------------------------"
         )
 
-        result = check(channel)
+        print(
+            f"[{index}/{total}]"
+        )
 
-        if result["reachable"]:
+        result = check_channel(
+            channel,
+            ffprobe_path
+        )
 
-            checked.append(result)
+        checked_channels.append(
+            result
+        )
 
-            print(
-                f"  -> "
-                f"{result['width']}x"
-                f"{result['height']} "
-                f"{result['response_ms']}ms "
-                f"score={result['score']}"
+    # --------------------------------------------------------
+    # 按频道分组
+    # --------------------------------------------------------
+
+    groups = group_channels(
+        checked_channels
+    )
+
+    best_channels = []
+
+    for tvg_id, candidates in groups.items():
+
+        best = select_best_source(
+            candidates
+        )
+
+        if best:
+
+            best_channels.append(
+                best
             )
 
     # --------------------------------------------------------
-    # 每频道选择最佳
-    # --------------------------------------------------------
-
-    best = {}
-
-    for channel in checked:
-
-        key = (
-            channel["name"]
-            .strip()
-            .lower()
-        )
-
-        if (
-            key not in best
-            or channel["score"]
-            > best[key]["score"]
-        ):
-
-            best[key] = channel
-
-    best_channels = list(
-        best.values()
-    )
-
-    # --------------------------------------------------------
-    # 分类
-    # --------------------------------------------------------
-
-    cctv_4k = [
-        x for x in best_channels
-        if (
-            "cctv"
-            in x["name"].lower()
-            and x["real_4k"]
-        )
-    ]
-
-    cctv_hd = [
-        x for x in best_channels
-        if (
-            "cctv"
-            in x["name"].lower()
-            and not x["real_4k"]
-            and x["width"] >= 1280
-        )
-    ]
-
-    phoenix = [
-        x for x in best_channels
-        if x.get("category")
-        == "凤凰卫视"
-    ]
-
-    guangdong = [
-        x for x in best_channels
-        if x.get("category")
-        == "广东"
-    ]
-
-    sports = [
-        x for x in best_channels
-        if x.get("category")
-        == "体育"
-    ]
-
-    hongkong = [
-        x for x in best_channels
-        if x.get("category")
-        == "香港"
-    ]
-
-    macau = [
-        x for x in best_channels
-        if x.get("category")
-        == "澳门"
-    ]
-
-    taiwan = [
-        x for x in best_channels
-        if x.get("category")
-        == "台湾"
-    ]
-
-    # --------------------------------------------------------
-    # BEST
+    # 最佳源排序
     # --------------------------------------------------------
 
     best_channels.sort(
+
         key=lambda x: (
-            x["real_4k"],
-            x["score"],
-            x["width"],
-            x["height"]
-        ),
-        reverse=True
+            x.get(
+                "category",
+                ""
+            ),
+            x.get(
+                "name",
+                ""
+            ),
+        )
+
     )
 
-    OUTPUT_DIR.mkdir(
+    # --------------------------------------------------------
+    # 统计
+    # --------------------------------------------------------
+
+    available_count = sum(
+
+        1
+        for x in checked_channels
+        if x.get(
+            "available",
+            False
+        )
+
+    )
+
+    true_4k_count = sum(
+
+        1
+        for x in checked_channels
+        if x.get(
+            "media",
+            {}
+        ).get(
+            "is_4k",
+            False
+        )
+
+    )
+
+    # --------------------------------------------------------
+    # 输出
+    # --------------------------------------------------------
+
+    output = {
+
+        "generated_at":
+            int(time.time()),
+
+        "source":
+            data.get(
+                "source",
+                ""
+            ),
+
+        "input_channel_count":
+            len(channels),
+
+        "available_source_count":
+            available_count,
+
+        "true_4k_source_count":
+            true_4k_count,
+
+        "best_channel_count":
+            len(best_channels),
+
+        "check_rounds":
+            CHECK_ROUNDS,
+
+        "channels":
+            checked_channels,
+
+        "best_channels":
+            best_channels,
+    }
+
+    OUTPUT_FILE.parent.mkdir(
         parents=True,
         exist_ok=True
     )
 
-    write_m3u(
-        OUTPUT_DIR / "best.m3u",
-        best_channels
-    )
+    OUTPUT_FILE.write_text(
 
-    write_m3u(
-        OUTPUT_DIR / "cctv_4k.m3u",
-        cctv_4k
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "cctv_hd.m3u",
-        cctv_hd
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "phoenix.m3u",
-        phoenix
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "guangdong.m3u",
-        guangdong
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "sports.m3u",
-        sports
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "hongkong.m3u",
-        hongkong
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "macau.m3u",
-        macau
-    )
-
-    write_m3u(
-        OUTPUT_DIR / "taiwan.m3u",
-        taiwan
-    )
-
-    # --------------------------------------------------------
-    # 检测报告
-    # --------------------------------------------------------
-
-    report = {
-        "generated_at":
-            int(time.time()),
-
-        "all_channels":
-            len(all_channels),
-
-        "target_channels":
-            len(candidates),
-
-        "tested":
-            len(selected),
-
-        "reachable":
-            len(checked),
-
-        "best":
-            len(best_channels),
-
-        "real_4k":
-            len(cctv_4k),
-
-        "channels":
-            checked
-    }
-
-    (
-        OUTPUT_DIR
-        / "check_report.json"
-    ).write_text(
         json.dumps(
-            report,
+            output,
             ensure_ascii=False,
             indent=2
         ),
+
         encoding="utf-8"
     )
 
-    print("")
+    # --------------------------------------------------------
+    # 完成
+    # --------------------------------------------------------
+
     print(
-        "=============================="
+        "\n================================================"
     )
 
     print(
-        f"全部源：{len(all_channels)}"
+        " 检测完成"
     )
 
     print(
-        f"目标源：{len(candidates)}"
+        "================================================"
     )
 
     print(
-        f"实际检测：{len(selected)}"
+        f"候选源：{len(channels)}"
     )
 
     print(
-        f"可访问：{len(checked)}"
+        f"可用源：{available_count}"
     )
 
     print(
-        f"最终频道：{len(best_channels)}"
+        f"检测到真 4K：{true_4k_count}"
     )
 
     print(
-        f"真正 4K：{len(cctv_4k)}"
+        f"频道最佳源：{len(best_channels)}"
     )
 
     print(
-        "=============================="
+        f"输出：{OUTPUT_FILE}"
+    )
+
+    print(
+        "================================================"
     )
 
 
 if __name__ == "__main__":
+
     main()
