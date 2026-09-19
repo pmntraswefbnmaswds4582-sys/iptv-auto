@@ -1,5 +1,5 @@
 {
-  "generated_at": 1789707255,
+  "generated_at": 1789793161,
   "source": "https://iptv-org.github.io/iptv/index.m3u",
   "channel_count": 22,
   "statistics": {
@@ -29,22 +29,22 @@
     "PhoenixInfoNewsChannel.hk": 1
   },
   "feed_statistics": {
-    "CCTV1.cn@HD": 1,
     "CCTV1.cn@SD": 1,
+    "CCTV1.cn@HD": 1,
     "CCTV2.cn@SD": 1,
     "CCTV3.cn@SD": 1,
     "CCTV4K.cn@HD": 1,
     "CCTV5Plus.cn@SD": 1,
-    "CCTV6.cn@HD": 1,
     "CCTV6.cn@SD": 1,
+    "CCTV6.cn@HD": 1,
     "CCTV7.cn@SD": 1,
     "CCTV8.cn@SD": 1,
     "CCTV9.cn@SD": 1,
     "CCTV10.cn@SD": 1,
     "CCTV11.cn@SD": 1,
     "CCTV12.cn@SD": 1,
-    "CCTV13.cn@HD": 1,
     "CCTV13.cn@SD": 1,
+    "CCTV13.cn@HD": 1,
     "CCTV14.cn@HD": 1,
     "CCTV15.cn@SD": 1,
     "CCTV16.cn@HD": 1,
@@ -54,16 +54,6 @@
   },
   "channels": [
     {
-      "name": "CCTV-1 (1080p)",
-      "tvg_id": "CCTV1.cn@HD",
-      "channel_id": "CCTV1.cn",
-      "feed": "HD",
-      "logo": "https://i.imgur.com/TpA3cUl.png",
-      "group": "General",
-      "category": "央视",
-      "url": "http://69.30.245.50/live/cctv1.m3u8"
-    },
-    {
       "name": "CCTV-1 (720p)",
       "tvg_id": "CCTV1.cn@SD",
       "channel_id": "CCTV1.cn",
@@ -72,6 +62,16 @@
       "group": "General",
       "category": "央视",
       "url": "http://74.91.26.218:82/live/cctv1hd.m3u8"
+    },
+    {
+      "name": "CCTV-1 HD (1080p)",
+      "tvg_id": "CCTV1.cn@HD",
+      "channel_id": "CCTV1.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/TpA3cUl.png",
+      "group": "General",
+      "category": "央视",
+      "url": "http://69.30.245.50/live/cctv1.m3u8"
     },
     {
       "name": "CCTV-2 (720p)",
@@ -94,7 +94,7 @@
       "url": "http://74.91.26.218:82/live/cctv3hd.m3u8"
     },
     {
-      "name": "CCTV-4K (1080p)",
+      "name": "CCTV-4K HD (1080p)",
       "tvg_id": "CCTV4K.cn@HD",
       "channel_id": "CCTV4K.cn",
       "feed": "HD",
@@ -114,16 +114,6 @@
       "url": "https://myip.pdtvhd.com/Sports/streams/CCTV5pul.m3u8"
     },
     {
-      "name": "CCTV-6 (1080p)",
-      "tvg_id": "CCTV6.cn@HD",
-      "channel_id": "CCTV6.cn",
-      "feed": "HD",
-      "logo": "https://i.imgur.com/rFiaef7.png",
-      "group": "Movies",
-      "category": "央视",
-      "url": "http://69.30.245.50/live/cctv6.m3u8"
-    },
-    {
       "name": "CCTV-6 [Geo-blocked]",
       "tvg_id": "CCTV6.cn@SD",
       "channel_id": "CCTV6.cn",
@@ -132,6 +122,16 @@
       "group": "Movies",
       "category": "央视",
       "url": "https://live.eac-news.com/CCTV/streams/cctv6.m3u8"
+    },
+    {
+      "name": "CCTV-6 HD (1080p)",
+      "tvg_id": "CCTV6.cn@HD",
+      "channel_id": "CCTV6.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/rFiaef7.png",
+      "group": "Movies",
+      "category": "央视",
+      "url": "http://69.30.245.50/live/cctv6.m3u8"
     },
     {
       "name": "CCTV-7 (720p)",
@@ -194,16 +194,6 @@
       "url": "http://74.91.26.218:82/live/cctv12hd.m3u8"
     },
     {
-      "name": "CCTV-13 (1080p)",
-      "tvg_id": "CCTV13.cn@HD",
-      "channel_id": "CCTV13.cn",
-      "feed": "HD",
-      "logo": "https://i.imgur.com/6MTar6J.png",
-      "group": "News",
-      "category": "央视",
-      "url": "http://go.bkpcp.top/mg/cctv13"
-    },
-    {
       "name": "CCTV-13 (720p)",
       "tvg_id": "CCTV13.cn@SD",
       "channel_id": "CCTV13.cn",
@@ -214,7 +204,17 @@
       "url": "http://74.91.26.218:82/live/cctv13hd.m3u8"
     },
     {
-      "name": "CCTV-14 (1080p)",
+      "name": "CCTV-13 HD (1080p)",
+      "tvg_id": "CCTV13.cn@HD",
+      "channel_id": "CCTV13.cn",
+      "feed": "HD",
+      "logo": "https://i.imgur.com/6MTar6J.png",
+      "group": "News",
+      "category": "央视",
+      "url": "http://go.bkpcp.top/mg/cctv13"
+    },
+    {
+      "name": "CCTV-14 HD (1080p)",
       "tvg_id": "CCTV14.cn@HD",
       "channel_id": "CCTV14.cn",
       "feed": "HD",
@@ -234,7 +234,7 @@
       "url": "https://xykt-fix.github.io/play/a02e/index.m3u8"
     },
     {
-      "name": "CCTV-16 (1080p)",
+      "name": "CCTV-16 HD (1080p)",
       "tvg_id": "CCTV16.cn@HD",
       "channel_id": "CCTV16.cn",
       "feed": "HD",
@@ -244,7 +244,7 @@
       "url": "http://74.91.26.218:82/live/cctv16hd.m3u8"
     },
     {
-      "name": "CCTV-17 (1080p)",
+      "name": "CCTV-17 HD (1080p)",
       "tvg_id": "CCTV17.cn@HD",
       "channel_id": "CCTV17.cn",
       "feed": "HD",
@@ -254,7 +254,7 @@
       "url": "http://74.91.26.218:82/live/cctv17hd.m3u8"
     },
     {
-      "name": "凤凰中文 (720p)",
+      "name": "Phoenix Chinese Channel (720p)",
       "tvg_id": "PhoenixChineseChannel.hk@SD",
       "channel_id": "PhoenixChineseChannel.hk",
       "feed": "SD",
@@ -264,7 +264,7 @@
       "url": "http://223.110.245.139/ott.js.chinamobile.com/PLTV/3/224/3221226922/index.m3u8"
     },
     {
-      "name": "凤凰资讯 (720p)",
+      "name": "Phoenix InfoNews Channel (720p)",
       "tvg_id": "PhoenixInfoNewsChannel.hk@SD",
       "channel_id": "PhoenixInfoNewsChannel.hk",
       "feed": "SD",
