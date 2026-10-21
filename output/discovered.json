@@ -1,5 +1,5 @@
 {
-  "generated_at": 1792472497,
+  "generated_at": 1792558889,
   "source": "https://iptv-org.github.io/iptv/index.m3u",
   "channel_count": 22,
   "statistics": {
@@ -224,14 +224,14 @@
       "url": "http://74.91.26.218:82/live/cctv14hd.m3u8"
     },
     {
-      "name": "CCTV-15 (1080p)",
+      "name": "CCTV-15 (720p)",
       "tvg_id": "CCTV15.cn@SD",
       "channel_id": "CCTV15.cn",
       "feed": "SD",
       "logo": "https://i.imgur.com/CCV0eRG.png",
       "group": "Music",
       "category": "央视",
-      "url": "https://xykt-fix.github.io/play/a02e/index.m3u8"
+      "url": "http://74.91.26.218:82/live/cctv15hd.m3u8"
     },
     {
       "name": "CCTV-16 HD (1080p)",
