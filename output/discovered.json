@@ -1,5 +1,5 @@
 {
-  "generated_at": 1792990795,
+  "generated_at": 1793078245,
   "source": "https://iptv-org.github.io/iptv/index.m3u",
   "channel_count": 22,
   "statistics": {
@@ -104,14 +104,14 @@
       "url": "http://198.204.240.250:82/live/cctv4k.m3u8"
     },
     {
-      "name": "CCTV-5+",
+      "name": "CCTV-5+ (1080p)",
       "tvg_id": "CCTV5Plus.cn@SD",
       "channel_id": "CCTV5Plus.cn",
       "feed": "SD",
       "logo": "https://i.imgur.com/OK8mdJV.png",
       "group": "Sports",
       "category": "央视",
-      "url": "https://myip.pdtvhd.com/Sports/streams/CCTV5pul.m3u8"
+      "url": "https://php.jdshipin.com/TVOD/iptv.php?id=cctv5p"
     },
     {
       "name": "CCTV-6 [Geo-blocked]",
